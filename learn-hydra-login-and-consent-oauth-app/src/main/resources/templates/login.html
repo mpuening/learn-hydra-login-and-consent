@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" th:with="disableSideMenu=true">
+
+<head>
+<title>Login</title>
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div layout:fragment="content">
+					<div class="col-sm-3 offset-sm-4 text-center">
+						<h1 class="display-4">Login</h1>
+
+						<a href="/oauth2/authorization/hydra-openid" class="btn btn-info">Open
+							ID Login</a> <a href="/oauth2/authorization/hydra-code"
+							class="btn btn-info">Access Token Login</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

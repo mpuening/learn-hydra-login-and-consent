@@ -1,0 +1,77 @@
+server:
+  port: 8081
+
+hydra:
+  oauth-public-url: http://localhost:4444
+  oauth-private-url: http://localhost:4444
+  admin-public-url: http://localhost:4445
+  admin-private-url: http://localhost:4445
+
+authentication:
+  ldap-url: ldap://localhost:8389/dc=example,dc=org
+
+application:
+  example-oauth-app-url: http://localhost:8080/
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+spring:
+  mvc:
+    view:
+      suffix: .html
+  thymeleaf:
+    cache: false
+    reactive:
+      max-chunk-size: 8192
+  redis:
+    host: localhost
+    port: 6379
+  session:
+    store-type: redis
+  ldap:
+    embedded:
+      base-dn: dc=example,dc=org
+      credential:
+        username: uid=admin
+        password: secret
+      ldif: classpath:people.ldif
+      port: 8389
+      validation:
+        enabled: false
+  security:
+    oauth2:
+      client:
+        provider:
+          hydra:
+            authorization-uri: ${hydra.oauth-public-url}/oauth2/auth
+            token-uri: ${hydra.oauth-private-url}/oauth2/token
+            jwk-set-uri: ${hydra.oauth-private-url}/.well-known/jwks.json
+            user-info-uri: ${hydra.oauth-private-url}/userinfo
+            user-name-attribute: sub
+      resourceserver:
+        opaquetoken:
+          client-id: hydra-service-client
+          client-secret: hydra-secret
+          introspection-uri: ${hydra.admin-private-url}/oauth2/introspect
+#        jwt:
+#          jwk-set-uri: ${hydra.oauth-private-url}/.well-known/jwks.json
+
+#logging:
+#  level:
+#    org.springframework.security: TRACE
+
+---
+spring:
+  profiles: docker-compose
+  redis:
+    host: redis
+
+hydra:
+  oauth-public-url: http://localhost:4444
+  oauth-private-url: http://hydra:4444
+  admin-public-url: http://localhost:4445
+  admin-private-url: http://hydra:4445

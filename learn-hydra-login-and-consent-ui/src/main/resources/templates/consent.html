@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" th:with="disableSideMenu=true">
+
+<head>
+<title>Consent</title>
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+
+				<div layout:fragment="content">
+
+					<div class="row">
+						<div class="col-sm-3 offset-sm-4 text-center">
+							<div th:fragment="profile-form" class="row" style="padding: 1em">
+								<form action="#" th:action="@{/consent}" method="post">
+
+									Hey <span sec:authentication="principal.fullName"></span>, <strong>
+										<span th:text="${client}" />
+									</strong> wants to access resources on your behalf and to:
+									</br>
+									<div class="form-group">
+										<ul style="list-style-type:none;">
+											<li th:each="scope: ${scopes}" style="margin-left: 4em; padding-left: 0; text-align: left;">
+												<input type="checkbox" name="grant_scopes" th:value="${scope}"> <span th:text="${scope}"/>
+											</li>
+										</ul>
+											
+									</div>
+									<input type="hidden" name="consent_challenge" th:value="${challenge}">
+									<input class="btn btn-info my-4" type="submit" name="submit"
+										value="Accept Access"></input>
+									<input class="btn btn-info my-4" type="submit" name="submit"
+										value="Deny Access"></input>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

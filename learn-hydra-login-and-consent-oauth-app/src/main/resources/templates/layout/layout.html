@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+
+<head th:replace="fragments/head :: head">
+<title>Layout</title>
+</head>
+
+<body>
+	<div th:replace="fragments/header :: header"></div>
+
+	<th:block th:if="${disableSideMenu == null || !disableSideMenu}">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-2">
+					<br />
+					<div th:replace="fragments/sidemenu :: sidemenu"></div>
+				</div>
+				<div class="col-md-10">
+					<br />
+					<div layout:fragment="content"></div>
+				</div>
+			</div>
+		</div>
+	</th:block>
+	<th:block th:if="${disableSideMenu != null && disableSideMenu}">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
+					<br />
+					<div layout:fragment="content"></div>
+				</div>
+			</div>
+		</div>
+	</th:block>
+
+	<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>

@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  hydra:
+    image: oryd/hydra:v1.3.2
+    container_name: hydra
+    ports:
+      - "4444:4444" # Public port
+      - "4445:4445" # Admin port
+      - "5555:5555" # Port for hydra token user
+    command:
+      serve all --dangerous-force-http
+    environment:
+      - URLS_SELF_ISSUER=http://localhost:4444
+      - URLS_LOGIN=http://localhost:8081/login
+      - URLS_CONSENT=http://localhost:8081/consent
+      - URLS_LOGOUT=http://localhost:8081/signout
+      - URLS_POST_LOGOUT_REDIRECT=http://localhost:8081/logout
+      - DSN=memory
+      - SECRETS_SYSTEM=youReallyNeedToChangeThis
+      - OIDC_SUBJECT_IDENTIFIERS_SUPPORTED_TYPES=public,pairwise
+      - OIDC_SUBJECT_IDENTIFIERS_PAIRWISE_SALT=youReallyNeedToChangeThis
+    restart: unless-stopped
+
+  redis:
+    image: redis
+    container_name: redis
+    expose:
+      - 6379
+
+## Comment out below config if running apps for development
+
+  learn-hydra-login-and-consent-oauth-app:
+    image: learn-hydra-login-and-consent-oauth-app:0.0.1-SNAPSHOT
+    container_name: learn-hydra-login-and-consent-oauth-app
+    depends_on:
+      - redis
+    environment:
+       - "SPRING_PROFILES_ACTIVE=docker-compose" 
+    ports:
+      - "8080:8080"
+
+  learn-hydra-login-and-consent-ui:
+    image: learn-hydra-login-and-consent-ui:0.0.1-SNAPSHOT
+    container_name: learn-hydra-login-and-consent-ui
+    depends_on:
+      - redis
+    environment:
+       - "SPRING_PROFILES_ACTIVE=docker-compose" 
+    ports:
+      - "8081:8081"

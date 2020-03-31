@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" th:with="disableSideMenu=true">
+
+<head>
+<title>Goodbye</title>
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+
+				<div layout:fragment="content">
+
+					<div class="row">
+						<div class="col-sm-3 offset-sm-4 text-center">
+							<h1 class="display-4">Goodbye...</h1>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-3 offset-sm-4 text-center">
+							<a href="/">Log in again...</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

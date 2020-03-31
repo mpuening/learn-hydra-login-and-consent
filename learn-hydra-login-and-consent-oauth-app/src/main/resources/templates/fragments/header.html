@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>Header</title>
+</head>
+
+<body>
+
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark"
+		th:fragment="header">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#">Learn Hydra Login And Consent</a>
+
+			<div th:if="${_csrf != null}">
+				<form th:action="@{/logout}" method="post"
+					class="form-inline my-2 my-lg-0">
+					<th:block sec:authorize="isAuthenticated()">
+						<span class="text-light">Welcome <span
+							sec:authentication="principal.attributes[fullName]"></span>&nbsp;
+						</span>
+					</th:block>
+					<input type="hidden" th:name="${_csrf.parameterName}"
+						th:value="${_csrf.token}" /> <input type="submit" name="Logout"
+						value="Logout">
+					&nbsp;
+					<a th:href="${@environment.getProperty('application.logout-url')}" class="btn btn-info">Sign Out</a>
+				</form>
+			</div>
+		</div>
+	</nav>
+
+</body>
+
+</html>

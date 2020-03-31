@@ -1,0 +1,12 @@
+
+/* tighten up the side menu */
+div.card-body {
+	margin-top: -1em;
+}
+li.nav-item {
+	margin-bottom: -1em;
+}
+
+.error {
+	color: red;
+}

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" th:with="disableSideMenu=true">
+
+<head>
+<title>Logout</title>
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+
+				<div layout:fragment="content">
+
+					<div class="row">
+						<div class="col-sm-3 offset-sm-4 text-center">
+							<div th:fragment="profile-form" class="row" style="padding: 1em">
+								<form action="#" th:action="@{/signout}" method="post">
+
+									<h2>Are you sure you want to logout?</h2>
+									
+									<input th:if="${(param.logout_challenge != null)}" name="logout_challenge" th:value="${param.logout_challenge}" type="hidden">
+									<input class="btn btn-info my-4" type="submit" name="submit"
+										value="Yes"></input>
+									<input class="btn btn-info my-4" type="submit" name="submit"
+										value="No"></input>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

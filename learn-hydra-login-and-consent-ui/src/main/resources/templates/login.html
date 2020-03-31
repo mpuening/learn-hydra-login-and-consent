@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout" th:with="disableSideMenu=true">
+
+<head>
+<title>Login</title>
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+
+				<div layout:fragment="content">
+
+					<div class="row">
+						<div class="col-sm-3 offset-sm-4 text-center">
+							<h1 class="display-4">Welcome</h1>
+							<div>
+								<form name="login" action="#" th:action="@{/login}"
+									method="post" class="text-center border border-light p-5">
+									<p class="h4 mb-4">Please sign in...</p>
+									<div th:if="${param.error}" class="alert alert-error">Invalid
+										username and password</div>
+									<div th:if="${param.logout}" class="alert alert-success">You
+										have been logged out</div>
+
+									<label for="username" class="sr-only">Username</label> <input
+										name="username" id="username" type="text"
+										class="form-control mb-4" placeholder="Username"> <label
+										for="password" class="sr-only">Password</label> <input
+										name="password" id="password" type="password"
+										class="form-control mb-4" placeholder="Password">
+
+										<input th:if="${(param.login_challenge != null)}" name="login_challenge" th:value="${param.login_challenge}" type="hidden">
+
+									<button class="btn btn-info btn-block my-4" type="submit">Sign
+										in</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
