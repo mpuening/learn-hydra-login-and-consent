@@ -41,7 +41,7 @@ public class OAuthClientConfiguration {
 
 					.pathMatchers("/me").permitAll()
 
-					// For debugging purposes
+					// For debugging purposes (not a good practice at all)
 					.pathMatchers("/actuator/**").permitAll()
 
 					.pathMatchers("/**").authenticated()

@@ -11,7 +11,7 @@ application:
   service-url: http://localhost:8081
   logout-url: ${hydra.oauth-public-url}/oauth2/sessions/logout
 
-# For debugging purposes
+# For debugging purposes (not a good practice)
 management:
   endpoints:
     web:

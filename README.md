@@ -4,7 +4,7 @@ Learn Hydra Login And Consent
 This project is my test project to learn OAuth2 from the perspective of application 
 development.
 
-In this project [Ory Hydra](https://www.ory.sh/docs/hydra/) is used as the OAuth2 provider
+In this project, [Ory Hydra](https://www.ory.sh/docs/hydra/) is used as the OAuth2 provider
 which means that one must implement
 [Hydra's Login and Consent Flow](https://www.ory.sh/docs/hydra/oauth2#implementing-a-login--consent-provider).
 
@@ -12,14 +12,16 @@ In order to be more realistic, I wanted my users to be stored in an LDAP system.
 
 Here is how the application works:
 
-First the user would navigate to the `http://localhost:8080/` page and the application would 
+First, the user would navigate to the `http://localhost:8080/` page and the application would 
 redirect the user to a "pre-login" page to ask how the user wants to login:
 
 ![Pre-login Page](images/prelogin.png "Pre-login Page")
 
 Note that the user was redirected over to `http://localhost:8080/login.html`
 
-Users would then choose between the OpenID login or the Access Token login. Once chosen, 
+Users would then choose between the OpenID login or the Access Token login. If your 
+application wants to support Github, Google, Facebook, Apple or other third party OAuth2 
+providers, you would add buttons to this page as well. Once chosen, 
 the user would then see a page to enter their username and password:
 
 ![Login Page](images/login.png "Login Page")
@@ -70,7 +72,7 @@ exists to query groups and custom fields.
 
 ### `Hydra` Service
 
-The `Hydra` service class have the details to communicate with the hydra service. This 
+The `Hydra` service class has the details to communicate with the hydra service. This 
 is where the magic occurs.
 
 ### `userinfo` Service
@@ -194,13 +196,13 @@ give you (this might be broken):
 
 ## TODO
 
-There is more to work to do such as:
+There is more work to do such as:
 
 * Protect Actuator Endpoints
 * Bug: Deny access behavior?
 * Bug: Logout flow has never been tested. Where is the cookie?
 * Add GlobalExceptionHandlers
-* SessionManagement (Stateless Services)
+* SessionManagement (Stateless Services) (https://github.com/jhipster/generator-jhipster/pull/11416)
 * OAuth2 Audience
 * Populate Standard OpenID fields
 * Minikube Deployment
