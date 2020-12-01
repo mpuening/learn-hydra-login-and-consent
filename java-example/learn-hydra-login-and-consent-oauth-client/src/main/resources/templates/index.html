@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layout/layout">
+
+<head>
+<title>Home</title>
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+
+				<div layout:fragment="content">
+
+					<h1>Welcome</h1>
+					
+					<p>
+					Note: Resource 1 accepts JWT tokens, Resource 2 & 3 accepts opaque access tokens.
+					</p>
+
+					<h5>Token Tests</h5>
+					<a href="/token" class="btn btn-info">View Token</a>
+
+					<br>
+					<br>
+
+					<h5>Propagate Token Tests</h5>
+					<a href="/propagate-credentials-to-resource1" class="btn btn-info">Propagate Credentials to Resource 1</a>
+					<a href="/propagate-credentials-to-resource2" class="btn btn-info">Propagate Credentials to Resource 2</a>
+					<a href="/propagate-credentials-to-resource3" class="btn btn-info">Propagate Credentials to Resource 3</a>
+
+					<br>
+					<br>
+					<h5>Client Credentials Tests</h5>
+					<a href="/client-credentials-to-resource1" class="btn btn-info">Test Client Credentials to Resource1 *</a>
+					<a href="/client-credentials-to-resource2" class="btn btn-info">Test Client Credentials to Resource2</a>
+					<a href="/client-credentials-to-resource3" class="btn btn-info">Test Client Credentials to Resource3</a>
+
+					<p>
+					* - Will always fail since not a JWT
+					</p>
+					<br>
+					<h5>Scope Tests</h5>
+					<a href="/openid" class="btn btn-info">OpenId</a>
+					<a href="/offline" class="btn btn-info">Offline</a>
+					<a href="/profile-read" class="btn btn-info">Profile.Read</a>
+
+					<br>
+					<br>
+					<h5>LDAP Group Tests</h5>
+					<a href="/manager" class="btn btn-info">Managers Only</a>
+					<a href="/developer" class="btn btn-info">Developers Only</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

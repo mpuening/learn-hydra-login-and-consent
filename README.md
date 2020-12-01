@@ -31,10 +31,10 @@ Note that the user was redirected over to `http://localhost:8081/login`
 Here is a table of the test users:
 
 |Username|   Password   |Role/Group|
-|:-------|:------------:|---------:|
-|pat     | patspassword |   Manager|
-|alice   |alicespassword|   Manager|
-|bob     | bobspassword | Developer|
+|:-------|:-------------|:---------|
+|pat     |patspassword  |Manager   |
+|alice   |alicespassword|Manager   |
+|bob     |bobspassword  |Developer |
 
 If you want to add more users, just add them to this file:
 
@@ -75,28 +75,38 @@ exists to query groups and custom fields.
 The `Hydra` service class has the details to communicate with the hydra service. This 
 is where the magic occurs.
 
-### `userinfo` Service
+Java Example
+============
 
-In order for the application to have a service to call, this application also includes 
-a sample `userinfo` service. It is not necessary for the login flow, but I did not 
-want to implement another service to run.
+The following projects are examples written in Java that show how one would interact 
+with the OAuth2 Server.
 
-## `learn-hydra-login-and-consent-oauth-app`
+## `learn-hydra-login-and-consent-oauth-client`
 
 This Spring Boot project is a very simple application that requires OAuth2 login.
 
-The home page has buttons to test various aspects such as calling the `userinfo` service 
-in the login and consent application.
+The home page has buttons to test various aspects such as calling the `resource` services
+that sit behind a Spring Gateway server.
 
-## `learn-hydra-login-and-consent-shared`
+## `learn-hydra-login-and-consent-discovery-server`
 
-Running all these applications on one system (i.e. your laptop) exposes a design constraint 
-in that the web cookies will collide and the application will not work (i.e. you won't 
-be able to log in). To resolve this issue, `Spring Session`, based by `Redis` is used.
+TODO
 
-Objects in the session (the UserDetails) are now shared between the applications and 
-they need to share classes. That is why `ExtendedLdapUserDetailsMapper` is in the shared
-project even though the OAuth application never really uses it.
+## `learn-hydra-login-and-consent-gateway`
+
+TODO
+
+## `learn-hydra-login-and-consent-resource1`
+
+TODO
+
+## `learn-hydra-login-and-consent-resource2`
+
+TODO
+
+## `learn-hydra-login-and-consent-resource3`
+
+TODO
 
 ## Build and Run (Docker Compose)
 
@@ -109,14 +119,14 @@ To build the application, run:
 To fire up the application, run:
 
 ```
-./deployments/docker-compose/start-spring-boot-login.sh
+./java-example/deployments/docker-compose/start-spring-boot-login.sh
 ```
 
 Before using the application, you need to create the two clients:
 
 ```
-./deployments/docker-compose/create-auth-code-client.sh
-./deployments/docker-compose/create-client-credentials-client.sh
+./java-example/deployments/docker-compose/create-auth-code-client.sh
+./java-example/deployments/docker-compose/create-client-credentials-client.sh
 ```
 
 Then you can navigate to:
@@ -128,13 +138,13 @@ http://localhost:8080
 To see if the application is running, run:
 
 ```
-./deployments/docker-compose/status.sh
+./java-example/deployments/docker-compose/status.sh
 ```
 
 To stop the application, run:
 
 ```
-./deployments/docker-compose/stop-spring-boot-login.sh
+./java-example/deployments/docker-compose/stop-spring-boot-login.sh
 ```
 
 ## Development
@@ -143,7 +153,7 @@ If you want to work on the applications outside of docker, just comment out the 
 of the Spring Boot applications in this file (see comment at the end of the file):
 
 ```
-./deployments/docker-compose/hydra-spring-boot-login.yml
+./java-example/deployments/docker-compose/hydra-spring-boot-login.yml
 ```
 
 ## Comparison to ORY's foobar Version
@@ -152,12 +162,12 @@ If you want to use ORY's version of their Login and Consent Flow, just use these
 instead:
 
 ```
-./deployments/docker-compose/start-ory-login.sh
+./java-example/deployments/docker-compose/start-ory-login.sh
 
-./deployments/docker-compose/create-auth-code-client.sh
-./deployments/docker-compose/create-client-credentials-client.sh
+./java-example/deployments/docker-compose/create-auth-code-client.sh
+./java-example/deployments/docker-compose/create-client-credentials-client.sh
 
-./deployments/docker-compose/status.sh
+./java-example/deployments/docker-compose/status.sh
 ```
 
 The login for this application is `foo@bar.com` just like the UI says. Note that the 
@@ -167,7 +177,7 @@ not have any of the LDAP information such as name and groups.
 To stop the application, run:
 
 ```
-./deployments/docker-compose/stop-ory-login.sh
+./java-example/deployments/docker-compose/stop-ory-login.sh
 ```
 
 ## Utilities
@@ -178,20 +188,20 @@ the clients beforehand.
 To get an access token using client credentials flow, run:
 
 ```
-./deployments/docker-compose/get-access-token.sh
+./java-example/deployments/docker-compose/get-access-token.sh
 ```
 
 To inspect the token, run this:
 
 ```
-./deployments/docker-compose/inspect-token.sh <PUT_TOKEN_HERE>
+./java-example/deployments/docker-compose/inspect-token.sh <PUT_TOKEN_HERE>
 ```
 
 To use the Auth Code Flow, run this command, and follow the instructions the command 
 give you (this might be broken):
 
 ```
-./deployments/docker-compose/get-openid-token.sh
+./java-example/deployments/docker-compose/get-openid-token.sh
 ```
 
 ## TODO
@@ -203,6 +213,18 @@ There is more work to do such as:
 * Bug: Logout flow has never been tested. Where is the cookie?
 * Add GlobalExceptionHandlers
 * SessionManagement (Stateless Services) (https://github.com/jhipster/generator-jhipster/pull/11416)
-* OAuth2 Audience
+* OAuth2 Audience, another level of security?
 * Populate Standard OpenID fields
+* Performance: Cache Token Introspection calls. See ReactiveOAuth2ResourceServerOpaqueTokenConfiguration
+* Secure Eureka with OAuth Client Creds, perhaps add Config server example
 * Minikube Deployment
+
+NodeJS Example
+==============
+
+TODO
+
+Go-lang Example
+===============
+
+TODO

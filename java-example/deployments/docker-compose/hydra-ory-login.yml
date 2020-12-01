@@ -1,0 +1,40 @@
+version: '3'
+
+services:
+  hydra:
+    image: oryd/hydra:v1.3.2
+    ports:
+      - "4444:4444" # Public port
+      - "4445:4445" # Admin port
+      - "5555:5555" # Port for hydra token user
+    command:
+      serve all --dangerous-force-http
+    environment:
+      - URLS_SELF_ISSUER=http://localhost:4444
+      - URLS_LOGIN=http://localhost:3000/login
+      - URLS_CONSENT=http://localhost:3000/consent
+      - URLS_LOGOUT=http://localhost:3000/logout
+      - URLS_POST_LOGOUT_REDIRECT=http://localhost:3000/
+      - DSN=memory
+      - SECRETS_SYSTEM=youReallyNeedToChangeThis
+      - OIDC_SUBJECT_IDENTIFIERS_SUPPORTED_TYPES=public,pairwise
+      - OIDC_SUBJECT_IDENTIFIERS_PAIRWISE_SALT=youReallyNeedToChangeThis
+    restart: unless-stopped
+
+  login-and-consent:
+    environment:
+      - HYDRA_ADMIN_URL=http://hydra:4445
+    image: oryd/hydra-login-consent-node:v1.1.1
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+## Comment out below config if running app for development
+
+  learn-hydra-login-and-consent-oauth-client:
+    image: learn-hydra-login-and-consent-oauth-client:0.0.2-SNAPSHOT
+    container_name: learn-hydra-login-and-consent-oauth-client
+    environment:
+       - "SPRING_PROFILES_ACTIVE=docker-compose" 
+    ports:
+      - "8080:8080"

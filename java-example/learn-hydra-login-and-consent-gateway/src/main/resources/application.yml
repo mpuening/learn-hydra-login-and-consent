@@ -1,0 +1,49 @@
+server:
+  port: 8888
+
+eureka:
+   client:
+      serviceUrl:
+         defaultZone: http://localhost:8761/eureka
+      instance:
+      preferIpAddress: true
+
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,gateway
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+#      default-filters:
+#      - TokenRelay
+---
+spring:
+  profiles: docker-compose
+
+eureka:
+   client:
+      serviceUrl:
+         defaultZone: http://learn-hydra-login-and-consent-discovery-server:8761/eureka
+      instance:
+      preferIpAddress: true
+
+---
+spring:
+  profiles: unittest
+  cloud:
+    discovery:
+      enabled: false
+    gateway:
+      enabled: false

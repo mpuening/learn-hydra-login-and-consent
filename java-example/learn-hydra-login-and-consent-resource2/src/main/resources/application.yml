@@ -1,0 +1,50 @@
+server:
+  port: 8086
+
+hydra:
+  oauth-public-url: http://localhost:4444
+  oauth-private-url: http://localhost:4444
+  admin-public-url: http://localhost:4445
+  admin-private-url: http://localhost:4445
+
+eureka:
+   client:
+      serviceUrl:
+         defaultZone: http://localhost:8761/eureka
+      instance:
+      preferIpAddress: true
+
+spring:
+  application:
+    name: resource2
+  security:
+    oauth2:
+      resourceserver:
+        opaquetoken:
+          client-id: hydra-auth-code-client
+          client-secret: hydra-secret
+          introspection-uri: ${hydra.admin-private-url}/oauth2/introspect
+
+---
+spring:
+  profiles: docker-compose
+
+hydra:
+  oauth-public-url: http://localhost:4444
+  oauth-private-url: http://hydra:4444
+  admin-public-url: http://localhost:4445
+  admin-private-url: http://hydra:4445
+
+eureka:
+   client:
+      serviceUrl:
+         defaultZone: http://learn-hydra-login-and-consent-discovery-server:8761/eureka
+      instance:
+      preferIpAddress: true
+
+---
+spring:
+  profiles: unittest
+  cloud:
+    discovery:
+      enabled: false

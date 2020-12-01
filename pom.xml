@@ -6,7 +6,7 @@
 
 	<groupId>io.github.learnhydra</groupId>
 	<artifactId>learn-hydra-login-and-consent</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	
 	<name>learn-hydra-login-and-consent</name>
@@ -15,19 +15,36 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.1.RELEASE</version>
+		<version>2.3.6.RELEASE</version>
 	</parent>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>11</java.version>
+		<spring-cloud.version>Hoxton.SR9</spring-cloud.version>
 	</properties>
 
 	<modules>
 		<module>learn-hydra-login-and-consent-ui</module>
-		<module>learn-hydra-login-and-consent-oauth-app</module>
-		<module>learn-hydra-login-and-consent-shared</module>
+		<module>java-example/learn-hydra-login-and-consent-oauth-client</module>
+		<module>java-example/learn-hydra-login-and-consent-discovery-server</module>
+		<module>java-example/learn-hydra-login-and-consent-gateway</module>
+		<module>java-example/learn-hydra-login-and-consent-resource1</module>
+		<module>java-example/learn-hydra-login-and-consent-resource2</module>
+		<module>java-example/learn-hydra-login-and-consent-resource3</module>
 	</modules>
 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>${spring-cloud.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+  
 </project>
