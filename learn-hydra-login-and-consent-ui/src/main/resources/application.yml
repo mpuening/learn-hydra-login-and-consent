@@ -27,11 +27,6 @@ spring:
     cache: false
     reactive:
       max-chunk-size: 8192
-  redis:
-    host: localhost
-    port: 6379
-  session:
-    store-type: redis
   ldap:
     embedded:
       base-dn: dc=example,dc=org
@@ -67,8 +62,6 @@ spring:
 ---
 spring:
   profiles: docker-compose
-  redis:
-    host: redis
 
 hydra:
   oauth-public-url: http://localhost:4444
