@@ -50,7 +50,6 @@ spring:
       resourceserver:
         opaquetoken:
           client-id: hydra-service-client
-          client-secret: hydra-secret
           introspection-uri: ${hydra.admin-private-url}/oauth2/introspect
         jwt:
           jwk-set-uri: ${hydra.oauth-private-url}/.well-known/jwks.json

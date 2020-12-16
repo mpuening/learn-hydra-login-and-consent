@@ -44,7 +44,7 @@ spring:
           hydra-openid:
             provider: hydra
             client-id: hydra-auth-code-client
-            client-secret: hydra-secret
+            client-authentication-method: none
             authorization-grant-type: authorization_code
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             scope:
@@ -54,7 +54,7 @@ spring:
           hydra-code:
             provider: hydra
             client-id: hydra-auth-code-client
-            client-secret: hydra-secret
+            client-authentication-method: none
             authorization-grant-type: authorization_code
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
             scope:

@@ -21,7 +21,7 @@ spring:
     oauth2:
       resourceserver:
         opaquetoken:
-          client-id: hydra-auth-code-client
+          client-id: hydra-service-client
           client-secret: hydra-secret
           introspection-uri: ${hydra.admin-private-url}/oauth2/introspect
 

@@ -8,7 +8,7 @@ sudo docker-compose \
 	hydra clients create \
 	--endpoint http://localhost:4445 \
 	--id hydra-auth-code-client \
-	--secret hydra-secret \
+	--token-endpoint-auth-method none \
 	--grant-types authorization_code,refresh_token \
 	--response-types code,id_token \
 	--scope openid,offline,profile.read \
