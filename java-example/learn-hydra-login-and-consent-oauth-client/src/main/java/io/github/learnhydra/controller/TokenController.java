@@ -16,7 +16,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.oauth2.client.web.reactive.function.client.ServerOAuth2AuthorizedClientExchangeFilterFunction;
 import org.springframework.security.oauth2.client.web.server.ServerOAuth2AuthorizedClientRepository;
-import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,9 +60,39 @@ public class TokenController {
 		clientCredentialsExchangeFilter = serverOAuth2AuthorizedClientExchangeFilterFunction("hydra-service", false);
 	}
 	
-	@GetMapping("/token")
-	public Mono<String> token(Authentication authentication) {
-		return withOAuthToken(authentication)
+	@GetMapping("/openid-token")
+	public Mono<String> opentoken(Authentication authentication) {
+		return withOpenIdToken(authentication)
+			.flatMap(token -> {
+				System.out.println("Client received token: " + token);
+				try {
+					token = URLEncoder.encode(token, "UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+				return Mono.just(String.format("redirect:/?success=&token=%s", token));
+			})
+			.switchIfEmpty(Mono.just("redirect:/?no_token="));
+	}
+
+	@GetMapping("/access-token")
+	public Mono<String> accessToken(Authentication authentication) {
+		return getAccessToken(authentication)
+			.flatMap(token -> {
+				System.out.println("Client received token: " + token);
+				try {
+					token = URLEncoder.encode(token, "UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					e.printStackTrace();
+				}
+				return Mono.just(String.format("redirect:/?success=&token=%s", token));
+			})
+			.switchIfEmpty(Mono.just("redirect:/?no_token="));
+	}
+
+	@GetMapping("/refresh-token")
+	public Mono<String> refreshToken(Authentication authentication) {
+		return getRefreshToken(authentication)
 			.flatMap(token -> {
 				System.out.println("Client received token: " + token);
 				try {
@@ -91,8 +121,7 @@ public class TokenController {
 			.uri(uri -> uri.path("/resource1/api/userinfo").build())
 			.attributes(ServerOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId("hydra-openid"))
 			.accept(MediaType.APPLICATION_JSON)
-			.exchange()
-			.flatMap(response -> {
+			.exchangeToMono(response -> {
 				if (response.statusCode().equals(HttpStatus.OK)) {
 					return response.bodyToMono(JsonNode.class).single().flatMap(json -> {
 						String sub = json.path("sub").asText("");
@@ -143,8 +172,7 @@ public class TokenController {
 			.uri(uri -> uri.path(path).build())
 			.attributes(ServerOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId(clientRegistrationId))
 			.accept(MediaType.APPLICATION_JSON)
-			.exchange()
-			.flatMap(response -> {
+			.exchangeToMono(response -> {
 				if (response.statusCode().equals(HttpStatus.OK)) {
 					return response.bodyToMono(JsonNode.class).single().flatMap(json -> {
 						String sub = json.path("sub").asText("");
@@ -201,8 +229,7 @@ public class TokenController {
 			.uri(uri -> uri.path(path).build())
 			.attributes(ServerOAuth2AuthorizedClientExchangeFilterFunction.clientRegistrationId("hydra-service"))
 			.accept(MediaType.APPLICATION_JSON)
-			.exchange()
-			.flatMap(response -> {
+			.exchangeToMono(response -> {
 				if (response.statusCode().equals(HttpStatus.OK)) {
 						return response.bodyToMono(JsonNode.class).single().flatMap(json -> {
 							String sub = json.path("sub").asText("");
@@ -226,17 +253,16 @@ public class TokenController {
 	}
 
 	/**
-	 * Get token for OpenId Login, otherwise Access Token
+	 * Get token for OpenId Login
 	 */
-	private Mono<String> withOAuthToken(Authentication authentication) {
+	private Mono<String> withOpenIdToken(Authentication authentication) {
 		return Mono.justOrEmpty(authentication)
 				.filter(a -> a instanceof OAuth2AuthenticationToken)
 				.cast(OAuth2AuthenticationToken.class)
 				.flatMap(token -> Mono.just(token.getPrincipal()))
-				.filter(p -> p instanceof DefaultOidcUser)
-				.cast(DefaultOidcUser.class)
-				.flatMap(user -> Mono.just(user.getIdToken().getTokenValue()))
-				.switchIfEmpty(getAccessToken(authentication));
+				.filter(p -> p instanceof OidcUser)
+				.cast(OidcUser.class)
+				.flatMap(user -> Mono.just(user.getIdToken().getTokenValue()));
 	}
 
 	/**
@@ -250,6 +276,21 @@ public class TokenController {
 							.flatMap(client -> {
 								String accessToken = client.getAccessToken().getTokenValue();
 								return Mono.just(accessToken);
+							});
+				});
+	}
+
+	/**
+	 * Get refresh token
+	 */
+	private Mono<String> getRefreshToken(Authentication authentication) {
+		return Mono.justOrEmpty(authentication).filter(a -> a instanceof OAuth2AuthenticationToken)
+				.cast(OAuth2AuthenticationToken.class).flatMap(token -> {
+					return oAuth2AuthorizedClientService
+							.loadAuthorizedClient(token.getAuthorizedClientRegistrationId(), token.getName())
+							.flatMap(client -> {
+								String refreshToken = client.getRefreshToken().getTokenValue();
+								return Mono.just(refreshToken);
 							});
 				});
 	}
