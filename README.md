@@ -1,6 +1,8 @@
 Learn Hydra Login And Consent
 =============================
 
+[![Continuous Integration](https://github.com/mpuening/learn-hydra-login-and-consent/actions/workflows/ci.yml/badge.svg)](https://github.com/mpuening/learn-hydra-login-and-consent/actions/workflows/ci.yml)
+
 This project is my test project to learn OAuth2 from the perspective of application 
 development.
 
